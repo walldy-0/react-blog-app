@@ -1,12 +1,13 @@
 import { Card, Button } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
+import clsx from 'clsx';
 
 const Post = props => {
 
   return (
-    <Card className='mt-3'>
+    <Card className={clsx('mt-3', props.isSingleMode && 'border-0')} >
       <Card.Body>
-        <Card.Title>{props.post.title}</Card.Title>
+        <Card.Title className={clsx(props.isSingleMode && 'fs-2')}>{props.post.title}</Card.Title>
         <Card.Text>
           <strong>Author:&nbsp;</strong>{props.post.author}<br />
           <strong>Published:&nbsp;</strong>{props.post.publishedDate}
