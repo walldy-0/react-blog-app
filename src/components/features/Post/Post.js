@@ -56,7 +56,7 @@ const Post = props => {
           <Button variant="secondary" onClick={modalHide}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={removeCurrentPost}>
+          <Button variant="danger" onClick={removeCurrentPost}>
             Remove
           </Button>
         </Modal.Footer>

@@ -1,23 +1,31 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addPost } from "../../../redux/postsRedux";
+import { addPost, editPost } from "../../../redux/postsRedux";
 import { useNavigate } from 'react-router-dom';
 
-const PostForm = () => {
+const PostForm = props => {
 
   const navigate = useNavigate();
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [publishedDate, setPublishedDate] = useState('');
-  const [shortDescription, setShortDescription] = useState('');
-  const [content, setContent] = useState('');
+  const [title, setTitle] = useState(props.post ? props.post.title : '');
+  const [author, setAuthor] = useState(props.post ? props.post.author : '');
+  const [publishedDate, setPublishedDate] = useState(props.post ? props.post.publishedDate : '');
+  const [shortDescription, setShortDescription] = useState(props.post ? props.post.shortDescription : '');
+  const [content, setContent] = useState(props.post ? props.post.content : '');
 
   const dispatch = useDispatch();
 
   const handleSubmit = e => {
     e.preventDefault();
-    dispatch(addPost({ title: title, author: author, publishedDate: publishedDate, shortDescription: shortDescription, content: content }));
+
+    const post = { title: title, author: author, publishedDate: publishedDate, shortDescription: shortDescription, content: content };
+    
+    if (props.isNewPost) {
+      dispatch(addPost(post));
+    } else {
+      post.id = props.post.id;
+      dispatch(editPost(post));
+    }
 
     navigate('/');
   };
@@ -27,35 +35,37 @@ const PostForm = () => {
       <Row className="mt-3">
         <Form.Group as={Col} md={4} controlId="postTitle">
           <Form.Label>Title</Form.Label>
-          <Form.Control onChange={e => setTitle(e.target.value)} placeholder="Enter title"></Form.Control>
+          <Form.Control value={title} onChange={e => setTitle(e.target.value)} placeholder="Enter title"></Form.Control>
         </Form.Group>
       </Row>
       <Row className="mt-3">
         <Form.Group as={Col} md={4} controlId="postAuthor">
           <Form.Label>Author</Form.Label>
-          <Form.Control onChange={e => setAuthor(e.target.value)} placeholder="Enter author"></Form.Control>
+          <Form.Control value={author} onChange={e => setAuthor(e.target.value)} placeholder="Enter author"></Form.Control>
         </Form.Group>
       </Row>
       <Row className="mt-3">
         <Form.Group as={Col} md={4} controlId="postPublishedDate">
           <Form.Label>Published</Form.Label>
-          <Form.Control onChange={e => setPublishedDate(e.target.value)} placeholder="Enter published date"></Form.Control>
+          <Form.Control value={publishedDate} onChange={e => setPublishedDate(e.target.value)} placeholder="Enter published date"></Form.Control>
         </Form.Group>
       </Row>
       <Row className="mt-3">
         <Form.Group as={Col} md={8} controlId="postShortDescription">
           <Form.Label>Short description</Form.Label>
-          <Form.Control as="textarea" rows="4" onChange={e => setShortDescription(e.target.value)} placeholder="Leave a comment here"></Form.Control>
+          <Form.Control as="textarea" rows="4" value={shortDescription} onChange={e => setShortDescription(e.target.value)} placeholder="Leave a comment here"></Form.Control>
         </Form.Group>
       </Row>
       <Row className="mt-3">
         <Form.Group as={Col} md={8} controlId="postContent">
           <Form.Label>Main Content</Form.Label>
-          <Form.Control as="textarea" rows="10" onChange={e => setContent(e.target.value)} placeholder="Leave a main content here"></Form.Control>
+          <Form.Control as="textarea" rows="10" value={content} onChange={e => setContent(e.target.value)} placeholder="Leave a main content here"></Form.Control>
         </Form.Group>
       </Row>
         <Button className="mt-3" variant="primary" type="submit">
-          Add post
+          {
+            props.isNewPost ? 'Add post' : 'Edit post'
+          }
         </Button>
     </Form>
   );
