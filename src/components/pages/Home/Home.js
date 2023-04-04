@@ -10,7 +10,7 @@ const Home = () => {
         <h2>All posts</h2>
         <Button variant='outline-primary' as={NavLink} to={'/post/add'}>Add post</Button>
       </div>
-    <Posts />
+      <Posts />
     </div>
   );
 };
