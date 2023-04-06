@@ -5,6 +5,8 @@ import { addPost, editPost } from "../../../redux/postsRedux";
 import { useNavigate } from 'react-router-dom';
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const PostForm = props => {
 
@@ -49,7 +51,7 @@ const PostForm = props => {
       <Row className="mt-3">
         <Form.Group as={Col} md={4} controlId="postPublishedDate">
           <Form.Label>Published</Form.Label>
-          <Form.Control value={publishedDate} onChange={e => setPublishedDate(e.target.value)} placeholder="Enter published date"></Form.Control>
+          <DatePicker selected={publishedDate} onChange={date => setPublishedDate(date)} />
         </Form.Group>
       </Row>
       <Row className="mt-3">
@@ -61,7 +63,7 @@ const PostForm = props => {
       <Row className="mt-3">
         <Form.Group as={Col} md={8} controlId="postContent">
           <Form.Label>Main Content</Form.Label>
-          <ReactQuill theme="snow" value={content} onChange={setContent} />
+          <ReactQuill theme="snow" value={content} onChange={setContent} placeholder="Leave a main content here" />
         </Form.Group>
       </Row>
         <Button className="mt-3" variant="primary" type="submit">
