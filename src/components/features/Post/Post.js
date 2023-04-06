@@ -1,14 +1,16 @@
 import { Card, Button, Modal } from 'react-bootstrap';
 import { NavLink, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { removePost } from '../../../redux/postsRedux';
+import { getCategoryById } from '../../../redux/categoriesRedux';
 import { useState } from 'react';
 
 const Post = props => {
 
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const category = useSelector(categories => getCategoryById(categories, props.post.categoryId)).name;
 
   const modalShow = () => setShowModal(true);
   const modalHide = () => setShowModal(false);
@@ -36,7 +38,8 @@ const Post = props => {
           </div>
           <Card.Text>
             <strong>Author:&nbsp;</strong>{props.post.author}<br />
-            <strong>Published:&nbsp;</strong>{props.post.publishedDate}
+            <strong>Published:&nbsp;</strong>{props.post.publishedDate}<br />
+            <strong>Category:&nbsp;</strong>{category}
           </Card.Text>
           <Card.Text dangerouslySetInnerHTML={{ __html: props.isSingleMode ? props.post.content : props.post.shortDescription }}></Card.Text>
           {

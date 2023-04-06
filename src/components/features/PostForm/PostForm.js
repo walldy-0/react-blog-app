@@ -1,6 +1,7 @@
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button, Row, Col, Dropdown, DropdownButton } from "react-bootstrap";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCategories } from "../../../redux/categoriesRedux";
 import { addPost, editPost } from "../../../redux/postsRedux";
 import { useNavigate } from 'react-router-dom';
 import ReactQuill from "react-quill";
@@ -18,19 +19,25 @@ const PostForm = props => {
   const [title, setTitle] = useState(props.post ? props.post.title : '');
   const [author, setAuthor] = useState(props.post ? props.post.author : '');
   const [publishedDate, setPublishedDate] = useState(props.post ? props.post.publishedDate : '');
+  const [categoryId, setCategoryId] = useState(props.post ? props.post.categoryId : '');
   const [shortDescription, setShortDescription] = useState(props.post ? props.post.shortDescription : '');
   const [content, setContent] = useState(props.post ? props.post.content : '');
   const [dateError, setDateError] = useState(false);
   const [contentError, setContentError] = useState(false);
+  const [categoryError, setCategoryError] = useState(false);
+
+  const categories = useSelector(getAllCategories);
+  const getCategoryNameById = id => categories.find(cat => cat.id === id).name;
 
   const dispatch = useDispatch();
 
   const handleSubmit = () => {
     setDateError(!publishedDate);
     setContentError(!content);
+    setCategoryError(!categoryId);
     
-    if (publishedDate && content) {
-      const post = { title: title, author: author, publishedDate: publishedDate, shortDescription: shortDescription, content: content };
+    if (publishedDate && content && categoryId) {
+      const post = { title: title, author: author, publishedDate: publishedDate, categoryId: categoryId, shortDescription: shortDescription, content: content };
       
       if (props.isNewPost) {
         dispatch(addPost(post));
@@ -40,6 +47,10 @@ const PostForm = props => {
       }
       navigate('/');
     }
+  };
+
+  const handleCategorySelect = e => {
+    setCategoryId(e);
   };
 
   return (
@@ -73,6 +84,23 @@ const PostForm = props => {
           <Form.Label>Published</Form.Label>
           <DatePicker dateFormat='yyyy-MM-dd' selected={publishedDate && stringToDate(publishedDate)} onChange={date => setPublishedDate(dateToString(date))} />
           {dateError && <small className="d-block form-text text-danger mt-2">Pick a date</small>}
+        </Form.Group>
+      </Row>
+      <Row className="mt-3">
+        <Form.Group as={Col} md={8} controlId="postCategory">
+          <Form.Label>Category</Form.Label>
+          <DropdownButton
+            variant="outline-secondary"
+            title={categoryId ? getCategoryNameById(categoryId) : "Select category..."}
+            onSelect={handleCategorySelect}
+          >
+            {
+              categories.map( cat => (
+                <Dropdown.Item key={cat.id} eventKey={cat.id}>{cat.name}</Dropdown.Item>
+              ))
+            }
+          </DropdownButton>
+          {categoryError && <small className="d-block form-text text-danger mt-2">Select category</small>}
         </Form.Group>
       </Row>
       <Row className="mt-3">
