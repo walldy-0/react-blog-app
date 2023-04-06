@@ -1,8 +1,10 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addPost, editPost } from "../../../redux/postsRedux";
 import { useNavigate } from 'react-router-dom';
+import ReactQuill from "react-quill";
+import 'react-quill/dist/quill.snow.css';
 
 const PostForm = props => {
 
@@ -59,7 +61,7 @@ const PostForm = props => {
       <Row className="mt-3">
         <Form.Group as={Col} md={8} controlId="postContent">
           <Form.Label>Main Content</Form.Label>
-          <Form.Control as="textarea" rows="10" value={content} onChange={e => setContent(e.target.value)} placeholder="Leave a main content here"></Form.Control>
+          <ReactQuill theme="snow" value={content} onChange={setContent} />
         </Form.Group>
       </Row>
         <Button className="mt-3" variant="primary" type="submit">

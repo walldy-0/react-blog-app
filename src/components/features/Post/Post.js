@@ -38,7 +38,7 @@ const Post = props => {
             <strong>Author:&nbsp;</strong>{props.post.author}<br />
             <strong>Published:&nbsp;</strong>{props.post.publishedDate}
           </Card.Text>
-          <Card.Text>{props.isSingleMode ? props.post.content : props.post.shortDescription}</Card.Text>
+          <Card.Text dangerouslySetInnerHTML={{ __html: props.isSingleMode ? props.post.content : props.post.shortDescription }}></Card.Text>
           {
             !props.isSingleMode && <Button variant='primary' as={NavLink} to={'/post/' + props.post.id}>Read more</Button>
           }
