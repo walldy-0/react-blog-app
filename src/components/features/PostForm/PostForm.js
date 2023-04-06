@@ -7,6 +7,8 @@ import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import stringToDate from '../../../utils/stringToDate';
+import dateToString from '../../../utils/dateToString';
 
 const PostForm = props => {
 
@@ -51,7 +53,7 @@ const PostForm = props => {
       <Row className="mt-3">
         <Form.Group as={Col} md={4} controlId="postPublishedDate">
           <Form.Label>Published</Form.Label>
-          <DatePicker selected={publishedDate} onChange={date => setPublishedDate(date)} />
+          <DatePicker dateFormat='yyyy-MM-dd' selected={publishedDate !== '' && stringToDate(publishedDate)} onChange={date => setPublishedDate(dateToString(date))} />
         </Form.Group>
       </Row>
       <Row className="mt-3">
