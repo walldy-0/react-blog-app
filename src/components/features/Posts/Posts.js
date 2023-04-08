@@ -1,11 +1,7 @@
-import { getAllPosts } from "../../../redux/postsRedux";
-import { useSelector } from "react-redux";
 import { Row, Col } from 'react-bootstrap';
 import Post from "../Post/Post";
 
-const Posts = () => {
-
-  const posts = useSelector(getAllPosts);
+const Posts = ({posts}) => {
 
   return (
     <Row>
